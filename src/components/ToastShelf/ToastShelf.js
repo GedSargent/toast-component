@@ -19,7 +19,12 @@ function ToastShelf({ setToastInstances, toastInstances }) {
   }, [setToastInstances]);
 
   return (
-    <ol className={styles.wrapper}>
+    <ol
+      className={styles.wrapper}
+      role="region"
+      aria-live="polite"
+      aria-label="Notification"
+    >
       {toastInstances.map(({ id, message, variant }) => {
         const handleClose = () => {
           const nextToastInstances = toastInstances.filter(
