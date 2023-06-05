@@ -4,6 +4,20 @@ import Toast from "../Toast";
 import styles from "./ToastShelf.module.css";
 
 function ToastShelf({ setToastInstances, toastInstances }) {
+  React.useEffect(() => {
+    const clearToastShelf = (event) => {
+      if (event.key === "Escape") {
+        setToastInstances([]);
+      }
+    };
+
+    document.addEventListener("keydown", clearToastShelf, false);
+
+    return () => {
+      document.removeEventListener("keydown", clearToastShelf, false);
+    };
+  }, [setToastInstances]);
+
   return (
     <ol className={styles.wrapper}>
       {toastInstances.map(({ id, message, variant }) => {
