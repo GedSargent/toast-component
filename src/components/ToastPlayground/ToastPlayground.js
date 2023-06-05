@@ -2,18 +2,38 @@ import React from "react";
 
 import Button from "../Button";
 
-import useToggle from "../../hooks/useToggle";
-import Toast from "../Toast/Toast";
+import ToastShelf from "../ToastShelf/ToastShelf";
 import styles from "./ToastPlayground.module.css";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
-  const [showToast, setShowToast] = useToggle(false);
+  const defaultVariant = VARIANT_OPTIONS[0];
   const [message, setMessage] = React.useState("");
-  const [selectedVariant, setSelectedVariant] = React.useState(
-    VARIANT_OPTIONS[0]
-  );
+  const [selectedVariant, setSelectedVariant] = React.useState(defaultVariant);
+  const [toastInstances, setToastInstances] = React.useState([]);
+
+  const addToastInstance = () => {
+    const nextToastInstances = [
+      ...toastInstances,
+      {
+        id: crypto.randomUUID(),
+        message,
+        variant: selectedVariant,
+        handleClose: () => {
+          const nextToastInstances = toastInstances.filter(({ id }) => {
+            return id !== this.id;
+          });
+
+          setToastInstances(nextToastInstances);
+        },
+      },
+    ];
+
+    setToastInstances(nextToastInstances);
+    setMessage("");
+    setSelectedVariant(defaultVariant);
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -22,11 +42,10 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {showToast && (
-        <Toast
-          message={message}
-          variant={selectedVariant}
-          handleClose={() => setShowToast(false)}
+      {toastInstances.length > 0 && (
+        <ToastShelf
+          setToastInstances={setToastInstances}
+          toastInstances={toastInstances}
         />
       )}
 
@@ -75,7 +94,7 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button onClick={() => setShowToast(!showToast)}>Pop Toast!</Button>
+            <Button onClick={addToastInstance}>Pop Toast!</Button>
           </div>
         </div>
       </div>
