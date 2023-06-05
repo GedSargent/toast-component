@@ -49,7 +49,13 @@ function ToastPlayground() {
         />
       )}
 
-      <div className={styles.controlsWrapper}>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          addToastInstance();
+        }}
+        className={styles.controlsWrapper}
+      >
         <div className={styles.row}>
           <label
             htmlFor="message"
@@ -64,6 +70,12 @@ function ToastPlayground() {
               className={styles.messageInput}
               value={message}
               onChange={(event) => setMessage(event.target.value)}
+              onKeyUp={(event) => {
+                if (event.key === "Enter" && event.shiftKey === false) {
+                  event.preventDefault();
+                  addToastInstance();
+                }
+              }}
             />
           </div>
         </div>
@@ -94,10 +106,10 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button onClick={addToastInstance}>Pop Toast!</Button>
+            <Button type="submit">Pop Toast!</Button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
