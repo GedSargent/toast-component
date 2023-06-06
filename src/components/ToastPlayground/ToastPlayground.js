@@ -2,16 +2,24 @@ import React from "react";
 
 import Button from "../Button";
 
+import {
+  ToastContext,
+  VARIANT_OPTIONS,
+  defaultVariant,
+} from "../ToastProvider/ToastProvider";
 import ToastShelf from "../ToastShelf/ToastShelf";
 import styles from "./ToastPlayground.module.css";
 
-const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
-
 function ToastPlayground() {
-  const defaultVariant = VARIANT_OPTIONS[0];
-  const [message, setMessage] = React.useState("");
-  const [selectedVariant, setSelectedVariant] = React.useState(defaultVariant);
-  const [toastInstances, setToastInstances] = React.useState([]);
+  const {
+    message,
+    setMessage,
+    selectedVariant,
+    setSelectedVariant,
+    toastInstances,
+    setToastInstances,
+  } = React.useContext(ToastContext);
+  const textareaRef = React.useRef(null);
 
   const addToastInstance = () => {
     const nextToastInstances = [
@@ -42,12 +50,7 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {toastInstances.length > 0 && (
-        <ToastShelf
-          setToastInstances={setToastInstances}
-          toastInstances={toastInstances}
-        />
-      )}
+      {toastInstances.length > 0 && <ToastShelf />}
 
       <form
         onSubmit={(event) => {
@@ -66,6 +69,7 @@ function ToastPlayground() {
           </label>
           <div className={styles.inputWrapper}>
             <textarea
+              ref={textareaRef}
               id="message"
               className={styles.messageInput}
               value={message}

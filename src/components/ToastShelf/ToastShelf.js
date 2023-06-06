@@ -3,8 +3,11 @@ import React from "react";
 import useEscapeKey from "../../hooks/useEscapeKey";
 import Toast from "../Toast";
 import styles from "./ToastShelf.module.css";
+import { ToastContext } from "../ToastProvider/ToastProvider";
 
-function ToastShelf({ setToastInstances, toastInstances }) {
+function ToastShelf() {
+  const { setToastInstances, toastInstances } = React.useContext(ToastContext);
+
   const clearToastShelf = (event) => {
     if (event.key === "Escape") {
       setToastInstances([]);
